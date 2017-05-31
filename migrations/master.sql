@@ -5849,5 +5849,10 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'jobDependencies' and column_name = 'operationResourceName' and data_type = 'character varying' and character_maximum_length = 255) then
       alter table "jobDependencies" alter column "operationResourceName" type varchar(255);
     end if;
+
+    -- Set not null constraint on subscriptionIntegrations.masterIntegrationId
+    if exists (select 1 from information_schema.columns where table_name = 'subscriptionIntegrations' and column_name = 'masterIntegrationId'  and is_nullable = 'YES') then
+      alter table "subscriptionIntegrations" alter column "masterIntegrationId" SET NOT NULL;
+    end if;
   end
 $$;
