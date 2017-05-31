@@ -5874,5 +5874,11 @@ do $$
     if exists (select 1 from information_schema.columns where table_name = 'subscriptionIntegrations' and column_name = 'masterIntegrationId'  and is_nullable = 'YES') then
       alter table "subscriptionIntegrations" alter column "masterIntegrationId" SET NOT NULL;
     end if;
+
+    -- Add buildsCreatedAtI Index on builds
+    if not exists (select 1 from pg_indexes where tablename = 'builds' and indexname = 'buildsCreatedAtI') then
+      create index "buildsCreatedAtI" on "builds" using btree("createdAt");
+    end if;
+
   end
 $$;
