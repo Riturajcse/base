@@ -5850,6 +5850,16 @@ do $$
       alter table "jobDependencies" alter column "operationResourceName" type varchar(255);
     end if;
 
+    -- change size of "displayName" to varchar(255) in views table
+    if not exists (select 1 from information_schema.columns where table_name = 'views' and column_name = 'displayName' and data_type = 'character varying' and character_maximum_length = 255) then
+      alter table "views" alter column "displayName" type varchar(255);
+    end if;
+
+    -- change size of "objectId" to varchar(255) in viewObjects table
+    if not exists (select 1 from information_schema.columns where table_name = 'viewObjects' and column_name = 'objectId' and data_type = 'character varying' and character_maximum_length = 255) then
+      alter table "viewObjects" alter column "objectId" type varchar(255);
+    end if;
+
     -- Set not null constraint on subscriptionIntegrations.masterIntegrationId
     if exists (select 1 from information_schema.columns where table_name = 'subscriptionIntegrations' and column_name = 'masterIntegrationId'  and is_nullable = 'YES') then
       alter table "subscriptionIntegrations" alter column "masterIntegrationId" SET NOT NULL;
